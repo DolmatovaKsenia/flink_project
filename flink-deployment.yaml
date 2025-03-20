@@ -1,0 +1,27 @@
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-job
+spec:
+  image: fantasticdrogon/flink-job:1.0.25
+  imagePullPolicy: IfNotPresent
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "2"
+    s3.endpoint: "http://minio:9000"
+    s3.access-key: "minioadmin"
+    s3.secret-key: "minioadmin"
+    s3.path.style.access: "true"
+  serviceAccount: flink
+  jobManager:
+    resource:
+      memory: "1048m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "1048m"
+      cpu: 1
+  job:
+    jarURI: s3://flink1/flink1-0.0.1-SNAPSHOT.jar
+    parallelism: 1
+    upgradeMode: stateless
